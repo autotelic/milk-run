@@ -34,8 +34,9 @@ safe-outputs:
     fallback-as-issue: false
     if-no-changes: ignore
   threat-detection:
-    engine: copilot
-    model: gpt-5-mini
+    engine:
+      id: copilot
+      model: gpt-5-mini
 ---
 
 # Milk-run guardrails
