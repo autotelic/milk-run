@@ -57,6 +57,51 @@ Consumer workflows must include `copilot-requests: write` under `permissions` (a
 
 Without one of these, the agent job fails at Copilot CLI (often a models/`403` or AI-credits pricing error) even though activation and skip-if-match succeed.
 
+## Optional: Copilot BYOK (external inference)
+
+Milk-run stays on the Copilot engine. Consumers can optionally route inference through an external provider via [Copilot BYOK](https://github.github.com/gh-aw/reference/engines/#copilot-bring-your-own-key-byok-mode) — set `COPILOT_PROVIDER_BASE_URL` in `engine.env`. Omit that block to keep normal Copilot org billing.
+
+Example: [OpenCode Go](https://opencode.ai/docs/go/) (OpenAI-compatible chat completions):
+
+1. Create a repo or org Actions secret, e.g. `OPENCODE_GO_API_KEY`, with the key from [opencode.ai/auth](https://opencode.ai/auth).
+2. In the consumer workflow, expand `engine` and allowlist the provider host:
+
+```yaml
+---
+on:
+  schedule:
+    - cron: "0 9 * * *"
+  workflow_dispatch:
+engine:
+  id: copilot
+  env:
+    COPILOT_PROVIDER_BASE_URL: https://opencode.ai/zen/go/v1
+    COPILOT_MODEL: kimi-k2.7-code
+    COPILOT_PROVIDER_API_KEY: ${{ secrets.OPENCODE_GO_API_KEY }}
+permissions:
+  contents: read
+  pull-requests: read
+  models: read
+  copilot-requests: write
+network:
+  allowed:
+    - defaults
+    - opencode.ai
+imports:
+  - uses: autotelic/milk-run/.github/workflows/shared/milk-run.md@v0.1.0
+    with:
+      agentName: my-task
+---
+
+# My task
+
+Describe the one job this agent should do each run.
+```
+
+Use a Go model served on `/chat/completions` (e.g. `kimi-k2.7-code`, `deepseek-v4-flash`, `glm-5.2`). Models on `/messages` need `COPILOT_PROVIDER_TYPE: anthropic`; `gpt-5.6-luna` needs `COPILOT_PROVIDER_WIRE_API: responses`.
+
+A literal `COPILOT_PROVIDER_BASE_URL` also steers threat-detection at that host. Recompile after changing frontmatter (`gh aw compile …`).
+
 ## What the wrapper enforces
 
 | Concern | Behavior |
