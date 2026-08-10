@@ -36,7 +36,9 @@ safe-outputs:
   threat-detection:
     engine:
       id: copilot
-      model: gpt-5-mini
+      # Must be a model present in the org Copilot catalog (see awf-reflect).
+      # gpt-5-mini is not available here; auto matches the main agent and resolves.
+      model: auto
 ---
 
 # Milk-run guardrails
