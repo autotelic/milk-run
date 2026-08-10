@@ -50,13 +50,16 @@ Prefer a tag or commit SHA over a moving branch.
 | Empty work | Agent should `noop`; `if-no-changes: ignore` avoids junk PRs |
 | Safety | No merge/force-push/secrets; smallest useful change; one concern per PR |
 
-## Local example
+## Local example / smoke test
 
-See [`.github/workflows/examples/milk-run-noop-demo.md`](.github/workflows/examples/milk-run-noop-demo.md) — imports the shared file locally and compiles to a lockfile.
+[`.github/workflows/milk-run-noop-demo.md`](.github/workflows/milk-run-noop-demo.md) imports the shared file in-repo and compiles to a lockfile GitHub Actions can dispatch.
 
 ```bash
-gh aw compile .github/workflows/examples/milk-run-noop-demo.md
+gh aw compile .github/workflows/milk-run-noop-demo.md
+gh aw run milk-run-noop-demo
 ```
+
+Expect a green run that calls **noop** and opens no PR.
 
 ## Versioning
 
