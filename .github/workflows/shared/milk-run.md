@@ -14,6 +14,12 @@ permissions:
   models: read
   copilot-requests: write
 network: defaults
+models:
+  # Fallback AIC rates ($/1M tokens) when the AWF proxy doesn't know the model
+  # (e.g. alias "detection"). Prevents HTTP 400 unknown_model_ai_credits.
+  default-ai-credits-pricing:
+    input: 5.0
+    output: 25.0
 tools:
   github:
     toolsets: [repos, pull_requests, issues]
@@ -27,6 +33,9 @@ safe-outputs:
     max: 1
     fallback-as-issue: false
     if-no-changes: ignore
+  threat-detection:
+    engine: copilot
+    model: gpt-5-mini
 ---
 
 # Milk-run guardrails
