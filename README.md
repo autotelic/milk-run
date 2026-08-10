@@ -140,3 +140,7 @@ Expect a **draft** PR titled `[milk-run/pr-demo] …` with label `milk-run`. A s
 - Tag releases as `v0.1.0`, `v0.2.0`, …
 - Consumers should pin `@v0.1.0` (immutable) or a full commit SHA
 - Moving majors (`@v0`) are optional convenience; recompile after `gh aw` cache updates when bumping
+
+## License
+
+[MIT](LICENSE)
